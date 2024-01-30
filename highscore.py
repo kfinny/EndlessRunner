@@ -20,7 +20,7 @@ def load_scores():
 
 def record_score(score: float):
     high_scores = load_scores()
-    if len(high_scores.scores) < 4:
+    if len(high_scores.scores) < 3:
         print("You got a new high score!")
         initials = input("Type your initials: ")
         high_scores.scores.append(Score(initials=initials[:3], score=score))
