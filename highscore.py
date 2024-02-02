@@ -18,18 +18,20 @@ def load_scores():
     return HighScores(scores=[])
 
 
-def record_score(score: float):
+def check_score(score: float) -> bool:
     high_scores = load_scores()
     if len(high_scores.scores) < 3:
-        print("You got a new high score!")
-        initials = input("Type your initials: ")
-        high_scores.scores.append(Score(initials=initials[:3], score=score))
+        return True
     else:
         for record in high_scores.scores:
-            if record.score > score:
-                print("You got a new high score.")
-                initials = input("Type your initials: ")
-                high_scores.scores.append(Score(initials=initials[:3], score=score))
+            if score > record.score:
+                return True
+    return False
+
+
+def record_score(initials: str, score: float):
+    high_scores = load_scores()
+    high_scores.scores.append(Score(initials=initials[:3], score=score))
     high_scores.scores.sort(key=lambda s: s.score, reverse=True)
     high_scores.scores = high_scores.scores[:3]
 
