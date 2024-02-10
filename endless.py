@@ -18,7 +18,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-
+PURPLE = (225, 0, 255)
 # Player
 player_size = 50
 player_pos = [WIDTH // 2, HEIGHT - player_size * 2]
@@ -80,7 +80,7 @@ class Enemy:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.color = random.choice([RED, GREEN, BLUE])
+        self.color = random.choice([RED, GREEN, BLUE, PURPLE])
 
 
 # Main game loop
