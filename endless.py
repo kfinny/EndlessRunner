@@ -4,6 +4,7 @@ import random
 from datetime import datetime, timedelta
 from highscore import record_score, check_score
 from enemy import Enemy
+from player import Player
 from globals import *
 
 # Initialize Pygame
@@ -14,7 +15,7 @@ font = pygame.font.Font(None, 36)
 
 
 # Player
-player_pos = [WIDTH // 2, HEIGHT - PLAYER_SIZE * 2]
+player = Player(WIDTH // 2, HEIGHT - PLAYER_SIZE * 2)
 player_speed = 5
 
 # Enemies
@@ -30,8 +31,8 @@ clock = pygame.time.Clock()
 
 
 # Function to draw the player
-def draw_player(pos):
-    pygame.draw.rect(screen, WHITE, (pos[0], pos[1], PLAYER_SIZE, PLAYER_SIZE))
+def draw_player(pos: Player):
+    pygame.draw.polygon(screen, player.color, player.points())
 
 
 # Function to draw an enemy
@@ -101,11 +102,11 @@ def game_loop():
                 running = False
 
         keys = pygame.key.get_pressed()
-        player_pos[0] += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * player_speed
-        if player_pos[0] < 0:
-            player_pos[0] = 0
-        if player_pos[0] + PLAYER_SIZE > WIDTH:
-            player_pos[0] = WIDTH - PLAYER_SIZE
+        player.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * player_speed
+        if player.left_boundary() < 0:
+            player.x = 0 + (player.size / 2)
+        if player.right_boundary() > WIDTH:
+            player.x = WIDTH - (player.size / 2)
 
         # Spawn enemies
         if random.randint(0, 100) < 5:
@@ -122,12 +123,7 @@ def game_loop():
 
         # Check for collisions with enemies
         for enemy in enemies:
-            if (
-                player_pos[0] < enemy.x + enemy.xsize
-                and player_pos[0] + PLAYER_SIZE > enemy.x
-                and player_pos[1] < enemy.y + enemy.ysize
-                and player_pos[1] + PLAYER_SIZE > enemy.y
-            ):
+            if (player.collision(enemy)):
                 end = datetime.now()
                 print("Game Over!")
                 score = (end-start).total_seconds()
@@ -138,7 +134,7 @@ def game_loop():
         screen.fill((0, 0, 0))
 
         # Draw the player
-        draw_player(player_pos)
+        draw_player(player)
 
         # Draw the enemies
         for enemy in enemies:
