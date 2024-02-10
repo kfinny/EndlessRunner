@@ -3,6 +3,8 @@ import sys
 import random
 from datetime import datetime, timedelta
 from highscore import record_score, check_score
+from enemy import Enemy
+from globals import *
 
 # Initialize Pygame
 pygame.init()
@@ -10,18 +12,9 @@ pygame.init()
 # Fonts
 font = pygame.font.Font(None, 36)
 
-# Constants
-WIDTH, HEIGHT = 800, 600
-FPS = 60
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-PURPLE = (225, 0, 255)
+
 # Player
-player_size = 50
-player_pos = [WIDTH // 2, HEIGHT - player_size * 2]
+player_pos = [WIDTH // 2, HEIGHT - PLAYER_SIZE * 2]
 player_speed = 5
 
 # Enemies
@@ -38,13 +31,13 @@ clock = pygame.time.Clock()
 
 # Function to draw the player
 def draw_player(pos):
-    pygame.draw.rect(screen, WHITE, (pos[0], pos[1], player_size, player_size))
+    pygame.draw.rect(screen, WHITE, (pos[0], pos[1], PLAYER_SIZE, PLAYER_SIZE))
 
 
 # Function to draw an enemy
-def draw_enemy(pos):
+def draw_enemy(pos: Enemy):
     # cleprint(f'x={pos.x}, y={pos.y}, color={pos.color}')
-    pygame.draw.rect(screen, pos.color, (pos.x, pos.y, enemy_size, enemy_size))
+    pygame.draw.rect(screen, pos.color, (pos.x, pos.y, pos.xsize, pos.ysize))
 
 
 def get_initials():
@@ -75,16 +68,7 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 
-class Enemy:
-
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.color = random.choice([RED, GREEN, BLUE, PURPLE])
-
-
 # Main game loop
-
 def main_menu():
     while True:
         screen.fill(BLACK)
@@ -120,8 +104,8 @@ def game_loop():
         player_pos[0] += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * player_speed
         if player_pos[0] < 0:
             player_pos[0] = 0
-        if player_pos[0] + player_size > WIDTH:
-            player_pos[0] = WIDTH - player_size
+        if player_pos[0] + PLAYER_SIZE > WIDTH:
+            player_pos[0] = WIDTH - PLAYER_SIZE
 
         # Spawn enemies
         if random.randint(0, 100) < 5:
@@ -139,10 +123,10 @@ def game_loop():
         # Check for collisions with enemies
         for enemy in enemies:
             if (
-                player_pos[0] < enemy.x + enemy_size
-                and player_pos[0] + player_size > enemy.x
-                and player_pos[1] < enemy.y + enemy_size
-                and player_pos[1] + player_size > enemy.y
+                player_pos[0] < enemy.x + enemy.xsize
+                and player_pos[0] + PLAYER_SIZE > enemy.x
+                and player_pos[1] < enemy.y + enemy.ysize
+                and player_pos[1] + PLAYER_SIZE > enemy.y
             ):
                 end = datetime.now()
                 print("Game Over!")

@@ -1,0 +1,18 @@
+import pygame
+
+# Constants
+WIDTH, HEIGHT = 800, 600
+FPS = 60
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+PURPLE = (225, 0, 255)
+
+PLAYER_SIZE = 50
+PLAYER_SPEED = 5
+
+# Enemies
+ENEMY_SIZE = 50
+ENEMY_SPEED = 3
