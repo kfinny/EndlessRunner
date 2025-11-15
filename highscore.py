@@ -14,7 +14,8 @@ class HighScores(BaseModel):
 def load_scores():
     highscore_path = Path('highscore.json')
     if highscore_path.exists():
-        return HighScores.parse_file(highscore_path)
+        with open(highscore_path, 'r') as fd:
+            return HighScores.model_validate_json(fd.read())
     return HighScores(scores=[])
 
 
@@ -39,4 +40,4 @@ def record_score(initials: str, score: float):
         print(f'{record.initials}: {record.score}')
     highscore_path = Path('highscore.json')
     with open(highscore_path, 'w') as fd:
-        fd.write(high_scores.json(indent=4))
+        fd.write(high_scores.model_dump_json(indent=4))
