@@ -1,3 +1,5 @@
+# This is where high score is tracked
+
 from pydantic import BaseModel
 from pathlib import Path
 
